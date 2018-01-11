@@ -30,10 +30,15 @@ else:
                         singleResultsCount = len(singleResults) - 1
                         while singleResultsCount >= a:
                             if singleResults[a] == alfabet[b]:
+                                test1 = singleResults
+                                test2 = singleResults[a]
+                                test3 = alfabet[b]
                                 licznik1 += 1
                                 a += 1
                                 b = 0
                             else:
+                                test4 = singleResults[a]
+                                test5 = alfabet[b]
                                 b += 1
                         print(licznik1)
 
