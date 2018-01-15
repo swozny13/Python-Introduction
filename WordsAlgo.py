@@ -24,34 +24,40 @@ else:
                         continue
                     else:
                         alfabet = "aąbcćdeęfghijklłmnńoóprsśtuwyzźż"
-                        a = 0
-                        b = 0
-                        licznik1 = 0
-                        singleResultsCount = len(singleResults) - 1
-                        while singleResultsCount >= a:
-                            if singleResults[a] == alfabet[b]:
-                                test1 = singleResults
-                                test2 = singleResults[a]
-                                test3 = alfabet[b]
-                                licznik1 += 1
-                                a += 1
-                                b = 0
-                            else:
-                                test4 = singleResults[a]
-                                test5 = alfabet[b]
-                                b += 1
-                        print(licznik1)
 
+                        specjalnyAlfabet = ""
+                        singleResultsCount = len(singleResults) - 1
+                        b = 0
                         c = 0
-                        licznik2 = 0
-                        while findCharCount >= c:
-                            if findChars[c] == alfabet[b]:
-                                licznik2 += 1
+                        while singleResultsCount >= c:
+                            if singleResults[c] == alfabet[b]:
+                                specjalnyAlfabet += singleResults[c]
                                 c += 1
                                 b = 0
                             else:
                                 b += 1
-                        print(licznik2)
+
+                        alfabetCount = 0
+                        a = 0
+                        licznik1 = 0
+                        licznik2 = 0
+                        alfabetLength = len(specjalnyAlfabet)
+                        while alfabetLength > a:
+                            literka = specjalnyAlfabet[alfabetCount]
+                            temp1 = singleResults.count(literka)
+                            temp2 = findChars.count(literka)
+                            # TODO: GDZIEŚ PRZY TYM IFIE NALEŻY PORÓWNYWAĆ CZY DANA LITERKA JUŻ BYŁA
+                            if temp1 != temp2:
+                                licznik1 += temp1
+                                licznik2 += temp2
+                                alfabetCount += 1
+                                a += 1
+                            else:
+                                licznik1 += temp1
+                                licznik2 += temp2
+                                alfabetCount += 1
+                                a += 1
+
                         if licznik1 == licznik2:
                             allResult.append(singleResults)
                         else:
