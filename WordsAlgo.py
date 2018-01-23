@@ -1,6 +1,8 @@
 file = open("slowa.txt", "r", encoding='utf-8')
 wordsList = []
 allResult = []
+# TODO: dodać np try except -> aby nie można wpisać liczb, oraz przerabiało...
+# TODO: ...jak wpisze się z dużych liter albo wycinało puste znaki
 findChars = input("Wpisz litery, z których chcesz ułożyć hasło: ")
 if len(findChars) < 2:
     print("Podaj przynajmniej 2 litery")
@@ -85,14 +87,8 @@ else:
 # WYNIKI DODAJE DO FINALNEJ LISTY
 print(" ")
 print("Wyszukane hasła z ciągu znaków: " + findChars)
-for found in allResult:
-    print(found)
 
-# TODO: PUNKTACJA
-# UTWORZYĆ SŁOWNIK [KLUCZ-WARTOŚĆ] DLA KONKRETNYCH LITER PRZYPISAĆ
-# ILOŚĆ PUNKTÓW, A PÓŹNIEJ PRZECHODZIĆ PO KONKRETNYCH LITERACH
-# Z NASZEJ FINALNEJ LISTY - TWORZĄC RÓWNIEŻ LICZNIK, KTÓRY SUMUJE
-# ŁĄCZNĄ PUNKTACJE DLA DANEGO SŁOWA, KTÓRA POSŁUŻY NAM POMOCĄ W SCRABBLE
+# PUNKTACJA ZA SŁOWA
 
 points = {"a": 1, "ą": 5, "b": 3, "c": 2, "ć": 6, "d": 2, "e": 1, "ę": 5, "f": 5, "g": 3,
           "h": 3, "i": 1, "j": 3, "k": 2, "l": 2, "ł": 3, "m": 2, "n": 1, "ń": 7, "o": 1,
@@ -112,4 +108,3 @@ for found in allResult:
         s += 1
 
     print("{}: {} pkt".format(found, licznikPunktow))
-
