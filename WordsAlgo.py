@@ -1,3 +1,5 @@
+import operator
+
 file = open("slowa.txt", "r", encoding='utf-8')
 wordsList = []
 allResult = []
@@ -107,4 +109,13 @@ for found in allResult:
         t += 1
         s += 1
 
-    print("{}: {} pkt".format(found, licznikPunktow))
+    # PRINTUJE HASŁA Z PUNKTACJĄ (NIEPOSORTOWANE)
+    # print("{}: {} pkt".format(found, licznikPunktow))
+
+    # WYNIKI DO SŁOWNIKA
+    resultsDictionary = {found: licznikPunktow}
+
+    # SORTUJE WYNIKI
+    print(sorted(resultsDictionary.items(), key=operator.itemgetter(0)))
+
+    # PRINTUJE WYNIKI
