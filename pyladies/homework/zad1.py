@@ -123,22 +123,70 @@ for book in books:
     for title in books[book]:
         quantity = books[book][title]['ilosc']
         counter += quantity
-print("Aktualna ilość książek w składzie:")
-print(counter)
+print("Aktualna ilość książek w składzie: {}".format(counter))
 print()
 
-# TODO: add min book counter !
 # 4
-max = 0
-min = 0
+currentlyMax = 0
+currentlyMin = 0
 maxBook = ""
 minBook = ""
+flag = True
 for book in books:
     for title in books[book]:
         quantity = books[book][title]['ilosc']
-        if quantity > max:
-            max = quantity
-            maxBook = "Najwięcej: {}: {}".format(title, quantity)
-print(maxBook)
-print(minBook)
+
+        if quantity > currentlyMax:
+            currentlyMax = quantity
+            maxBook = "{}: {} szt".format(title, quantity)
+        elif quantity == currentlyMax:
+            currentlyMax = quantity
+            maxBook += ", {}: {} szt".format(title, quantity)
+
+        if flag:
+            currentlyMin = quantity
+            flag = False
+        else:
+            if quantity < currentlyMin:
+                currentlyMin = quantity
+                minBook = "{}: {} szt".format(title, quantity)
+            elif quantity == currentlyMin:
+                currentlyMin = quantity
+                minBook += ", {}: {} szt".format(title, quantity)
+
+print("Najwięcej tytułów w księgarni: {}".format(maxBook))
+print("Najmniej tytułów w księgarni: {}".format(minBook))
 print()
+
+# 5
+currentlyMax = 0
+currentlyMin = 0
+maxBookAuthor = ""
+minBookAuthor = ""
+flag = True
+for book in books:
+    current = 0
+    for title in books[book]:
+        quantity = books[book][title]['ilosc']
+        current += quantity
+
+    if current > currentlyMax:
+        currentlyMax = current
+        maxBookAuthor = "{} - {} szt".format(book, current)
+    elif current == currentlyMax:
+        currentlyMax = current
+        maxBookAuthor += ", {} - {} szt".format(book, current)
+
+    if flag:
+        currentlyMin = current
+        flag = False
+    else:
+        if current < currentlyMin:
+            currentlyMin = current
+            minBookAuthor = "{} - {} szt".format(book, current)
+        elif current == currentlyMin:
+            currentlyMin = current
+            minBookAuthor += ", {} - {} szt".format(book, current)
+
+print("Najwięcej książek jest autora: {}".format(maxBookAuthor))
+print("Najmniej książek jest autora: {}".format(minBookAuthor))
