@@ -1,32 +1,68 @@
 from datetime import *
 
+"""
+Simple program to....
+"""
 HR_MENU = ["1. Dodaj pracownika", "2. Wyświetl liste pracowników", "0. Wyloguj"]
 DIRECTOR_MENU = ["1. Wyświetl liste pracowników", "2. Wprowadź wynagrodzenie", "3. Daj podwyżkę", "0. Wyloguj"]
 
 
-class Person(object):
+# TODO: add PESEL to person field? case: multiple person
+# TODO: Add statistic about person (age average, salary average)
 
-    # TODO: add id and generate this maybe by function
+
+class Person(object):
+    person_id = 1
+
+    # @staticmethod
+    # def set_person_id():
+    #     print(Person.person_id)
+
     def __init__(self, first_name, last_name, birthday, email, phone, salary):
+        self.id = Person.person_id
         self.first_name = first_name
         self.last_name = last_name
         self.birthday = birthday
         self.email = email
         self.phone = phone
         self.salary = salary
+        Person.person_id += 1
 
-    # TODO: add salary (private)
-    def salary(self):
+    # TODO: add salary (private function)
+    def set_salary(self):
         self.salary = 0
 
     def __str__(self):
         print_person = ""
-        print_person += "Imię i Nazwisko: " + self.first_name + " " + self.last_name + "\n"
+        print_person += str(self.id) + "\n"
+        print_person += "Imię i nazwisko: " + self.first_name + " " + self.last_name + "\n"
         print_person += "Wiek: " + self.birthday + " lat" + "\n"
         print_person += "Email: " + self.email + "\n"
         print_person += "Telefon: " + self.phone + "\n"
         print_person += "Wynagrodzenie: " + str(self.salary) + " PLN"
         return print_person
+
+    def give_salary(self):
+        self.salary = float(input("Wprowadź kwotę wynagrodzenia: "))
+        if self.salary < 0:
+            print("Wynagrodzenie nie może być mniejszę niż 0 PLN")
+        else:
+            print("Wynagrodzenie " + self.first_name + " " + self.last_name + " wynosi teraz: " + str(
+                self.salary) + " PLN")
+
+    def give_salary_raise(self):
+        if self.salary == 0:
+            print("Nie możesz dać podwyżki, gdy wynagrodzenie wynosi 0 PLN")
+        else:
+            set_percent_increase = int(input("Wprowadź % podwyżki: "))
+            if set_percent_increase <= 0:
+                print("Podwyżka musi być większa niż 0%")
+            else:
+                self.salary = self.salary + ((self.salary * set_percent_increase) / 100)
+                print(
+                    "Dodano " + str(set_percent_increase) + "% podwyżki dla " + self.first_name + " " + self.last_name)
+                print("Wynagrodzenie " + self.first_name + " " + self.last_name + " wynosi teraz: " + str(
+                    self.salary) + " PLN")
 
 
 class Account(object):
@@ -41,7 +77,7 @@ director = Account("Prezes", 1111, "admin")
 hr_manager = Account("Szef HR", 2222, "hr")
 
 
-def menu():
+def start():
     persons_list = []
 
     def add_person():
@@ -63,6 +99,7 @@ def menu():
         surname = input("Podaj nazwisko: ")
         return surname.capitalize().replace(" ", "")
 
+    # TODO: fix data format, count age with months and days
     def age_convert():
         now = int(datetime.now().year)
         age = input("Podaj date urodzenia (YYYY-MM-DD): ")
@@ -90,24 +127,26 @@ def menu():
             convert_number += "+48 " + number[0:3] + " " + number[3:6] + " " + number[6:9]
         return convert_number
 
+    def salary():
+        print_persons()
+        get_id = int(input("Podaj id pracownika: "))
+        person_selected = persons_list[get_id - 1]
+        Person.give_salary(person_selected)
+
+    def increase():
+        print_persons()
+        get_id = int(input("Podaj id pracownika: "))
+        person_selected = persons_list[get_id - 1]
+        Person.give_salary_raise(person_selected)
+
     def print_persons():
         if len(persons_list) == 0:
             print("Brak pracowników")
         else:
             print("Pracownicy w bazie:")
             print("")
-            id = 0
             for person in persons_list:
-                id += 1
-                print(id)
                 print(person)
-
-    # TODO: FIX THIS. id -> object, not list!
-    def raise_salary():
-        print_persons()
-        id = int(input("Wybierz pracownika"))
-        print(persons_list[id] - 1)
-        salary = float(input("Podaj wynagrodzenie"))
 
     def hr_menu():
         flag = True
@@ -149,9 +188,9 @@ def menu():
                 print_persons()
                 print("")
             elif choice == 2:
-                raise_salary()
+                salary()
             elif choice == 3:
-                print()
+                increase()
             elif choice == 0:
                 flag = False
                 print("Wylogowano: " + director.account_type)
@@ -178,4 +217,4 @@ def menu():
     login()
 
 
-menu()
+start()
