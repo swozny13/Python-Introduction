@@ -116,6 +116,6 @@ for found in allResult:
     resultsDictionary = {found: licznikPunktow}
 
     # SORTUJE WYNIKI
-    print(sorted(resultsDictionary.items(), key=operator.itemgetter(0)))
-
-    # PRINTUJE WYNIKI
+    a = sorted(resultsDictionary.items(), key=operator.itemgetter(0))
+    print(a)
+# PRINTUJE WYNIKI
