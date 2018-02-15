@@ -30,7 +30,7 @@ def dzielenie():
         print("Nie dziel przez 0!")
     else:
         wynik = float(a) / float(b)
-    print("Wynik działania: {}".format(round(wynik, 2)))
+        print("Wynik działania: {}".format(round(wynik, 2)))
 
 
 def potegowanie():
@@ -43,7 +43,6 @@ def potegowanie():
 
 def silnia(a):
     if a > 1:
-        wynik = 0
         wynik = a * silnia(a - 1)
     else:
         return 1
