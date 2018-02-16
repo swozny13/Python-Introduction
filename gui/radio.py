@@ -28,7 +28,7 @@ class RadioBox(Frame):
         self.button = Button(self, text="Prześlij").grid(row=6, column=2, sticky=W)
 
     def update_text(self):
-        message = "Twoją ulubioną potrawą jest " + str(self.favorite.get()) + "."
+        message = "Twoją ulubioną potrawą jest " + str(self.favorite.get()) + ". :)"
 
         self.result_text.delete(0.0, END)
         self.result_text.insert(0.0, message)
