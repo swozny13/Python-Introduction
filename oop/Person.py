@@ -3,11 +3,14 @@ from datetime import *
 """
 Simple program to....
 """
-HR_MENU = ["1. Dodaj pracownika", "2. Wyświetl liste pracowników", "0. Wyloguj"]
-DIRECTOR_MENU = ["1. Wyświetl liste pracowników", "2. Wprowadź wynagrodzenie", "3. Daj podwyżkę", "0. Wyloguj"]
+HR_MENU = ["1. Dodaj pracownika", "2. Wyświetl liste pracowników", "3. Statystyki", "0. Wyloguj"]
+DIRECTOR_MENU = ["1. Wyświetl liste pracowników", "2. Wprowadź wynagrodzenie", "3. Daj podwyżkę",
+                 "4. Zwolnij pracownika", "0. Wyloguj"]
+STATISTICS_MENU = ["1. Średnia pensja w firmie", "2. Średnia wieku w firmie"]
+
+salary_list = []
 
 
-# TODO: add PESEL to person field? case: multiple person
 # TODO: Add statistic about person (age average, salary average)
 
 
@@ -18,11 +21,12 @@ class Person(object):
     # def set_person_id():
     #     print(Person.person_id)
 
-    def __init__(self, first_name, last_name, birthday, email, phone, salary):
+    def __init__(self, first_name, last_name, birthday, pesel, email, phone, salary):
         self.id = Person.person_id
         self.first_name = first_name
         self.last_name = last_name
         self.birthday = birthday
+        self.pesel = pesel
         self.email = email
         self.phone = phone
         self.salary = salary
@@ -64,6 +68,13 @@ class Person(object):
                 print("Wynagrodzenie " + self.first_name + " " + self.last_name + " wynosi teraz: " + str(
                     self.salary) + " PLN")
 
+    # TODO: continue
+    def add_salary_to_list(self, *list):
+        # todo: for loops????
+        salary_list.append(self.salary)
+        print(salary_list)
+    # def salary_average(self):
+
 
 class Account(object):
 
@@ -79,16 +90,22 @@ hr_manager = Account("Szef HR", 2222, "hr")
 
 def start():
     persons_list = []
+    person_pesel_list = []
 
     def add_person():
         person_first_name = name_convert()
         person_last_name = surname_convert()
         person_birthday = age_convert()
+        person_pesel = pesel_validator_finder()
+        person_pesel_list.append(person_pesel)
         person_email = email_generator(person_first_name, person_last_name)
         person_phone = number_validator()
         person_salary = 0
-        person = Person(person_first_name, person_last_name, person_birthday, person_email, person_phone, person_salary)
+        person = Person(person_first_name, person_last_name, person_birthday, person_pesel, person_email, person_phone,
+                        person_salary)
         persons_list.append(person)
+        for p in persons_list:
+            print(p)
         return person
 
     def name_convert():
@@ -110,6 +127,18 @@ def start():
             return age_convert()
         return str(convert_age)
 
+    def pesel_validator_finder():
+        pesel = input("Podaj PESEL: ")
+        if len(pesel) == 11:
+            if pesel in person_pesel_list:
+                print("Pracownik o podanym PESELU znajduje się w bazie!")
+                pesel_validator_finder()
+            else:
+                return pesel
+        else:
+            print("Podany numer PESEL musi zawierać 11 cyfr")
+            pesel_validator_finder()
+
     def email_generator(name, surname):
         email = name.lower() + "." + surname.lower() + "@company.com.pl"
         return email
@@ -128,16 +157,36 @@ def start():
         return convert_number
 
     def salary():
-        print_persons()
-        get_id = int(input("Podaj id pracownika: "))
-        person_selected = persons_list[get_id - 1]
-        Person.give_salary(person_selected)
+        if len(persons_list) == 0:
+            print("Brak pracowników")
+        else:
+            print_persons()
+            get_id = int(input("Podaj id pracownika: "))
+            person_selected = persons_list[get_id - 1]
+            Person.give_salary(person_selected)
 
     def increase():
-        print_persons()
-        get_id = int(input("Podaj id pracownika: "))
-        person_selected = persons_list[get_id - 1]
-        Person.give_salary_raise(person_selected)
+        if len(persons_list) == 0:
+            print("Brak pracowników")
+        else:
+            print_persons()
+            get_id = int(input("Podaj id pracownika: "))
+            person_selected = persons_list[get_id - 1]
+            Person.give_salary_raise(person_selected)
+
+    # TODO: not working perfect - fix them. delete person by object, not object in list
+    def release():
+        if len(persons_list) == 0:
+            print("Brak pracowników")
+        else:
+            print_persons()
+            get_id = int(input("Podaj id pracownika: "))
+            person_selected = persons_list[get_id - 1]
+            # print(person_selected['PESEL'])
+            persons_list.remove(person_selected)
+            print("Zwolniłeś pracownika")
+            for p in person_pesel_list:
+                print(p)
 
     def print_persons():
         if len(persons_list) == 0:
@@ -165,12 +214,28 @@ def start():
                 print("")
                 print_persons()
                 print("")
+            elif choice == 3:
+                statistics_menu()
             elif choice == 0:
                 flag = False
                 print("Wylogowano: " + hr_manager.account_type)
                 login()
             else:
                 print("Nie ma takiej opcji")
+
+    def statistics_menu():
+        print("")
+        for elem in STATISTICS_MENU:
+            print(elem)
+        print("")
+        choice = int(input("Podaj opcje: "))
+
+        if choice == 1:
+            Person.add_salary_to_list(*persons_list)
+        elif choice == 2:
+            pass
+        else:
+            print("Nie ma takiej opcji")
 
     def director_menu():
         flag = True
@@ -191,6 +256,8 @@ def start():
                 salary()
             elif choice == 3:
                 increase()
+            elif choice == 4:
+                release()
             elif choice == 0:
                 flag = False
                 print("Wylogowano: " + director.account_type)
