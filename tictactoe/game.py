@@ -16,6 +16,8 @@ def who_first():
     pl1 = players[0]
     pl2 = players[1]
     print()
+    print("Losuje kolejność...")
+    print()
     print("{} zaczyna grę!".format(players[0]).capitalize())
     print("Wasze oznaczenia: ")
     print("{}: {}".format(pl1.capitalize(), x))
@@ -30,49 +32,94 @@ def print_board(board):
           + " | " + board[6] + " | " + board[7] + " | " + board[8] + " | " + "\n")
 
 
-def check_columns(board, symbol):
+def check_columns(board, symbol, player):
     if board[0] == symbol and board[3] == symbol and board[6] == symbol \
             or board[1] == symbol and board[4] == symbol and board[7] == symbol \
             or board[2] == symbol and board[5] == symbol and board[8] == symbol:
-        print("win")
+        print("{} jesteś zwycięzcą".format(player))
+        return False
     else:
-        print("not win")
+        return True
 
 
-def check_rows(board, symbol):
+def check_rows(board, symbol, player):
     if board[0] == symbol and board[1] == symbol and board[2] == symbol \
             or board[3] == symbol and board[4] == symbol and board[5] == symbol \
             or board[6] == symbol and board[7] == symbol and board[8] == symbol:
-        print("win")
+        print("{} jesteś zwycięzcą".format(player))
+        return False
     else:
-        print("not win")
+        return True
 
 
-def check_diagonals(board, symbol):
+def check_diagonals(board, symbol, player):
     if board[0] == symbol and board[4] == symbol and board[8] == symbol \
             or board[2] == symbol and board[4] == symbol and board[6] == symbol:
-        print("win")
+        print("{} jesteś zwycięzcą".format(player))
+        return False
     else:
-        print("not win")
+        return True
+
+
+def check_position(board, position):
+    if board[int(position) - 1] == 'X' or board[int(position) - 1] == "O":
+        return False
+    else:
+        return True
 
 
 def start():
     steps = 0
-    play = True
+    game_in_progress = True
+    change = True
     players = who_first()
+    player1 = players[0].capitalize()
+    player2 = players[1].capitalize()
     print_board(items_board)
-    while play:
+    while game_in_progress:
         if steps < 9:
-            position = input("Podaj pozycję: ")
-            for n, i in enumerate(items_board):
-                if i == position:
-                    items_board[n] = x
-            print_board(items_board)
-            check_columns(items_board, x)
-            steps += 1
+            if change:
+                position = input("{} podaj pozycję: ".format(player1))
+                print()
+                engaged_position = check_position(items_board, position)
+                if engaged_position:
+                    for n, i in enumerate(items_board):
+                        if i == position:
+                            items_board[n] = x
+                    print_board(items_board)
+                    end_by_columns = check_columns(items_board, x, player1)
+                    end_by_rows = check_rows(items_board, x, player1)
+                    end_by_diagonals = check_diagonals(items_board, x, player1)
+                    if end_by_columns and end_by_diagonals and end_by_rows:
+                        steps += 1
+                        change = False
+                    else:
+                        game_in_progress = False
+                else:
+                    print("To pole jest już zajęte. Wybierz jeszcze raz")
+            else:
+                position = input("{} podaj pozycję: ".format(player2))
+                print()
+                check_position(items_board, position)
+                engaged_position = check_position(items_board, position)
+                if engaged_position:
+                    for n, i in enumerate(items_board):
+                        if i == position:
+                            items_board[n] = o
+                    print_board(items_board)
+                    end_by_columns = check_columns(items_board, x, player1)
+                    end_by_rows = check_rows(items_board, x, player1)
+                    end_by_diagonals = check_diagonals(items_board, x, player1)
+                    if end_by_columns and end_by_diagonals and end_by_rows:
+                        steps += 1
+                        change = True
+                    else:
+                        game_in_progress = False
+                else:
+                    print("To pole jest już zajęte. Wybierz jeszcze raz")
         else:
             print("REMIS")
-            play = False
+            game_in_progress = False
 
 
 start()
